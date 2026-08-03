@@ -42,3 +42,46 @@ export interface TeamGroup {
   title: string;
   description: string;
 }
+
+export interface NewsArticle {
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  category: string;
+  coverImage: string;
+  content: string[];
+}
+
+export type HouseStyle = "Bungalow" | "Duplex" | "Triplex" | "Villa" | "Cottage";
+
+export type HouseHeight = "Single Storey" | "Duplex" | "Triplex";
+
+export interface HouseSpec {
+  projectSlug: string;
+  name: string;
+  style: HouseStyle;
+  height: HouseHeight;
+  bedrooms: number;
+  toilets: number;
+  sizeSqft: number;
+  plotSizeDecimal: number;
+  price: number;
+}
+
+export interface SpaceMakerHouse extends HouseSpec {
+  coverImage: string;
+  gallery: string[];
+}
+
+export interface TeamMember {
+  name: string;
+  role: string;
+  image: string;
+  featured?: boolean;
+  socials?: {
+    dribbble?: string;
+    x?: string;
+    linkedin?: string;
+  };
+}

@@ -2,9 +2,13 @@ import { Container } from "@/components/ui/container";
 import { SectionKicker } from "@/components/ui/section-kicker";
 import { RevealText } from "@/components/ui/reveal-text";
 import { FadeIn } from "@/components/ui/fade-in";
-import { teamGroups } from "@/lib/data/team";
+import { TeamCard } from "./team-card";
+import { teamMembers } from "@/lib/data/team";
 
 export function AboutTeam() {
+  const featured = teamMembers.find((m) => m.featured);
+  const rest = teamMembers.filter((m) => !m.featured);
+
   return (
     <section className="border-t border-line py-24 md:py-32">
       <Container>
@@ -21,20 +25,20 @@ export function AboutTeam() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-x-8 gap-y-12 border-t border-line pt-12 sm:grid-cols-2">
-          {teamGroups.map((group, i) => (
-            <FadeIn key={group.title} delay={i * 0.08}>
-              <span className="text-sm text-stone-light">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-4 font-display text-xl font-medium tracking-tight">
-                {group.title}
-              </h3>
-              <p className="mt-3 max-w-sm text-[15px] leading-relaxed text-stone">
-                {group.description}
-              </p>
+        <div className="border-t border-line pt-12">
+          {featured && (
+            <FadeIn className="mx-auto mb-14 max-w-xl md:mb-20">
+              <TeamCard member={featured} />
             </FadeIn>
-          ))}
+          )}
+
+          <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-3">
+            {rest.map((member, i) => (
+              <FadeIn key={member.name} delay={i * 0.08}>
+                <TeamCard member={member} />
+              </FadeIn>
+            ))}
+          </div>
         </div>
       </Container>
     </section>

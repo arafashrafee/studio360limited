@@ -20,7 +20,6 @@ export function SectionKicker({
       )}
     >
       {index && <span className="tabular-nums">{index}</span>}
-      <span className={cn("h-px w-8", light ? "bg-background/40" : "bg-stone-light")} />
       <span>{label}</span>
     </div>
   );

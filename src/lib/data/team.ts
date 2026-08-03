@@ -1,4 +1,4 @@
-import type { TeamGroup } from "@/types";
+import type { TeamGroup, TeamMember } from "@/types";
 
 export const teamGroups: TeamGroup[] = [
   {
@@ -20,5 +20,34 @@ export const teamGroups: TeamGroup[] = [
     title: "Site Supervision",
     description:
       "On-the-ground oversight during construction, protecting design decisions as they're built.",
+  },
+];
+
+// Placeholder roster — replace name/role and drop matching photos into public/team/.
+export const teamMembers: TeamMember[] = [
+  {
+    name: "Team Member 1",
+    role: "Role",
+    image: "/team/member-1.jpg",
+    featured: true,
+    socials: { dribbble: "#", x: "#", linkedin: "#" },
+  },
+  {
+    name: "Team Member 2",
+    role: "Role",
+    image: "/team/member-2.jpg",
+    socials: { dribbble: "#", x: "#", linkedin: "#" },
+  },
+  {
+    name: "Team Member 3",
+    role: "Role",
+    image: "/team/member-3.jpg",
+    socials: { dribbble: "#", x: "#", linkedin: "#" },
+  },
+  {
+    name: "Team Member 4",
+    role: "Role",
+    image: "/team/member-4.jpg",
+    socials: { dribbble: "#", x: "#", linkedin: "#" },
   },
 ];

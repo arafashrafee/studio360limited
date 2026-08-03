@@ -12,11 +12,14 @@ const NAV_GROUPS: { label: string; href: string }[][] = [
   [
     { label: "Projects", href: "/projects" },
     { label: "Services", href: "/services" },
-    { label: "About", href: "/about" },
+    { label: "News", href: "/news" },
   ],
   [
+    { label: "Space Maker", href: "/space-maker" },
+  ],
+  [
+    { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
-    { label: "Start a Project", href: "/contact" },
   ],
 ];
 

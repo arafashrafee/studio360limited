@@ -19,6 +19,9 @@ const siteUrl = "https://studio360.ltd";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: "/favicon.png",
+  },
   title: {
     default: "Studio360 Ltd — Architecture & Engineering Consultancy",
     template: "%s — Studio360 Ltd",
