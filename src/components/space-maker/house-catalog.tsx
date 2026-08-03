@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { LayoutGrid, List, ChevronDown } from "lucide-react";
-import type { HouseHeight, HouseStyle, SpaceMakerHouse } from "@/types";
+import type { HouseStyle, SpaceMakerHouse } from "@/types";
 import { cn } from "@/lib/utils";
 import { HouseCard } from "./house-card";
 
@@ -17,100 +17,22 @@ const CATEGORIES: { label: string; style: HouseStyle | "All" }[] = [
   { label: "Cottage", style: "Cottage" },
 ];
 
-const HEIGHT_OPTIONS: HouseHeight[] = ["Single Storey", "Duplex", "Triplex"];
-const BEDROOM_OPTIONS = [2, 3, 4, 5, 6];
-const TOILET_OPTIONS = [2, 3, 4, 5, 6];
-const SIZE_OPTIONS: { label: string; test: (sqft: number) => boolean }[] = [
-  { label: "Under 2,000 sqft", test: (s) => s < 2000 },
-  { label: "2,000 – 3,500 sqft", test: (s) => s >= 2000 && s < 3500 },
-  { label: "3,500 – 5,000 sqft", test: (s) => s >= 3500 && s < 5000 },
-  { label: "Above 5,000 sqft", test: (s) => s >= 5000 },
-];
-
-function FilterGroup({
-  title,
-  children,
-  defaultOpen = true,
-}: {
-  title: string;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-}) {
-  return (
-    <details className="group border-b border-line py-4" open={defaultOpen}>
-      <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-medium">
-        {title}
-        <ChevronDown className="size-4 text-stone transition-transform duration-300 group-open:rotate-180" strokeWidth={1.75} />
-      </summary>
-      <div className="mt-3 flex flex-col gap-2.5">{children}</div>
-    </details>
-  );
-}
-
-function CheckboxRow({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: () => void;
-}) {
-  return (
-    <label className="flex cursor-pointer items-center gap-2.5 text-sm text-stone transition-colors hover:text-foreground">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-        className="size-3.5 rounded-sm border-line accent-foreground"
-      />
-      {label}
-    </label>
-  );
-}
-
-function toggleSetValue<T>(set: Set<T>, value: T) {
-  const next = new Set(set);
-  if (next.has(value)) {
-    next.delete(value);
-  } else {
-    next.add(value);
-  }
-  return next;
-}
-
 export function HouseCatalog({ houses }: { houses: SpaceMakerHouse[] }) {
   const [activeStyle, setActiveStyle] = useState<HouseStyle | "All">("All");
-  const [heights, setHeights] = useState<Set<HouseHeight>>(new Set());
-  const [bedrooms, setBedrooms] = useState<Set<number>>(new Set());
-  const [toilets, setToilets] = useState<Set<number>>(new Set());
-  const [sizes, setSizes] = useState<Set<number>>(new Set());
   const [sort, setSort] = useState<SortKey>("featured");
   const [view, setView] = useState<"grid" | "list">("grid");
 
   const filtered = useMemo(() => {
-    let list = houses.filter((house) => {
-      if (activeStyle !== "All" && house.style !== activeStyle) return false;
-      if (heights.size > 0 && !heights.has(house.height)) return false;
-      if (bedrooms.size > 0 && !bedrooms.has(house.bedrooms)) return false;
-      if (toilets.size > 0 && !toilets.has(house.toilets)) return false;
-      if (
-        sizes.size > 0 &&
-        !SIZE_OPTIONS.some(
-          (option, index) => sizes.has(index) && option.test(house.sizeSqft)
-        )
-      )
-        return false;
-      return true;
-    });
+    const list = houses.filter(
+      (house) => activeStyle === "All" || house.style === activeStyle
+    );
 
-    list = [...list];
     if (sort === "price-asc") list.sort((a, b) => a.price - b.price);
     if (sort === "price-desc") list.sort((a, b) => b.price - a.price);
     if (sort === "size-desc") list.sort((a, b) => b.sizeSqft - a.sizeSqft);
 
     return list;
-  }, [houses, activeStyle, heights, bedrooms, toilets, sizes, sort]);
+  }, [houses, activeStyle, sort]);
 
   return (
     <div>
@@ -136,53 +58,7 @@ export function HouseCatalog({ houses }: { houses: SpaceMakerHouse[] }) {
         {filtered.length} {filtered.length === 1 ? "house" : "houses"}
       </p>
 
-      <div className="grid grid-cols-1 gap-10 pt-10 lg:grid-cols-[240px_1fr]">
-        <aside className="lg:pr-6">
-          <FilterGroup title="Building Height">
-            {HEIGHT_OPTIONS.map((option) => (
-              <CheckboxRow
-                key={option}
-                label={option}
-                checked={heights.has(option)}
-                onChange={() => setHeights((prev) => toggleSetValue(prev, option))}
-              />
-            ))}
-          </FilterGroup>
-
-          <FilterGroup title="Bedrooms">
-            {BEDROOM_OPTIONS.map((option) => (
-              <CheckboxRow
-                key={option}
-                label={`${option} Bedrooms`}
-                checked={bedrooms.has(option)}
-                onChange={() => setBedrooms((prev) => toggleSetValue(prev, option))}
-              />
-            ))}
-          </FilterGroup>
-
-          <FilterGroup title="Toilets">
-            {TOILET_OPTIONS.map((option) => (
-              <CheckboxRow
-                key={option}
-                label={`${option} Toilets`}
-                checked={toilets.has(option)}
-                onChange={() => setToilets((prev) => toggleSetValue(prev, option))}
-              />
-            ))}
-          </FilterGroup>
-
-          <FilterGroup title="Size" defaultOpen={false}>
-            {SIZE_OPTIONS.map((option, index) => (
-              <CheckboxRow
-                key={option.label}
-                label={option.label}
-                checked={sizes.has(index)}
-                onChange={() => setSizes((prev) => toggleSetValue(prev, index))}
-              />
-            ))}
-          </FilterGroup>
-        </aside>
-
+      <div className="pt-10">
         <div>
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6">
             <p className="font-display text-xl font-medium tracking-tight">

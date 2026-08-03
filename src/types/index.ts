@@ -67,6 +67,8 @@ export interface HouseSpec {
   sizeSqft: number;
   plotSizeDecimal: number;
   price: number;
+  /** Space Maker specific imagery — overrides the linked project's gallery. */
+  images?: string[];
 }
 
 export interface SpaceMakerHouse extends HouseSpec {

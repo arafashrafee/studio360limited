@@ -1,6 +1,18 @@
 import type { HouseSpec, SpaceMakerHouse } from "@/types";
 import { getProjectBySlug } from "./projects";
 
+/**
+ * Builds `/space-maker/<folder>/1.png … n.png`. A folder can be shared by more
+ * than one house — `offset` rotates the order so each listing leads with a
+ * different cover image.
+ */
+function houseImages(folder: string, count: number, offset = 0) {
+  return Array.from(
+    { length: count },
+    (_, i) => `/space-maker/${folder}/${((i + offset) % count) + 1}.png`
+  );
+}
+
 const houseSpecs: HouseSpec[] = [
   {
     projectSlug: "triplex-residence-natore",
@@ -12,6 +24,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 5850,
     plotSizeDecimal: 8.5,
     price: 8250000,
+    images: houseImages("apon-nibash", 4),
   },
   {
     projectSlug: "nexus-boulevard",
@@ -23,6 +36,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 5400,
     plotSizeDecimal: 7.75,
     price: 7250000,
+    images: houseImages("swapnonir", 4),
   },
   {
     projectSlug: "bahauddin-villa",
@@ -34,6 +48,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 3850,
     plotSizeDecimal: 5.5,
     price: 4950000,
+    images: houseImages("sukhonir", 4),
   },
   {
     projectSlug: "aholi-mansion",
@@ -45,6 +60,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 4200,
     plotSizeDecimal: 6,
     price: 5850000,
+    images: houseImages("shantikunja", 3),
   },
   {
     projectSlug: "habib",
@@ -56,6 +72,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 3250,
     plotSizeDecimal: 4.5,
     price: 3550000,
+    images: houseImages("kalyan-kunja", 4),
   },
   {
     projectSlug: "jolshiri",
@@ -67,6 +84,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 2250,
     plotSizeDecimal: 3.25,
     price: 2550000,
+    images: houseImages("amrabati", 4),
   },
   {
     projectSlug: "shuchana",
@@ -78,6 +96,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 1650,
     plotSizeDecimal: 2.24,
     price: 1650000,
+    images: houseImages("amrabati", 4, 1),
   },
   {
     projectSlug: "green-bay",
@@ -89,6 +108,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 2950,
     plotSizeDecimal: 4,
     price: 3250000,
+    images: houseImages("kalyan-kunja", 4, 1),
   },
   {
     projectSlug: "khorshed-alam-residence",
@@ -100,6 +120,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 3100,
     plotSizeDecimal: 4.25,
     price: 3450000,
+    images: houseImages("sukhonir", 4, 1),
   },
   {
     projectSlug: "reza-residence",
@@ -111,6 +132,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 2400,
     plotSizeDecimal: 3.5,
     price: 2650000,
+    images: houseImages("amrabati", 4, 2),
   },
   {
     projectSlug: "united-city",
@@ -122,6 +144,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 4650,
     plotSizeDecimal: 6.5,
     price: 6250000,
+    images: houseImages("swapnonir", 4, 1),
   },
   {
     projectSlug: "baki-house",
@@ -133,6 +156,7 @@ const houseSpecs: HouseSpec[] = [
     sizeSqft: 1550,
     plotSizeDecimal: 2,
     price: 1550000,
+    images: houseImages("amrabati", 4, 3),
   },
 ];
 
@@ -140,10 +164,11 @@ export const spaceMakerHouses: SpaceMakerHouse[] = houseSpecs
   .map((spec) => {
     const project = getProjectBySlug(spec.projectSlug);
     if (!project) return null;
+    const gallery = spec.images?.length ? spec.images : project.gallery;
     return {
       ...spec,
-      coverImage: project.coverImage,
-      gallery: project.gallery,
+      coverImage: gallery[0] ?? project.coverImage,
+      gallery,
     };
   })
   .filter((house): house is SpaceMakerHouse => house !== null);
