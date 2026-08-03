@@ -6,13 +6,12 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 
-const SLIDE_DURATION = 6000;
+const SLIDE_DURATION = 5000;
 
 type Slide = { src: string; alt: string };
 
 export function HeroSlideshow({ slides }: { slides: Slide[] }) {
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const goTo = useCallback(
@@ -22,20 +21,16 @@ export function HeroSlideshow({ slides }: { slides: Slide[] }) {
   const next = useCallback(() => goTo(index + 1), [goTo, index]);
   const prev = useCallback(() => goTo(index - 1), [goTo, index]);
 
+  // Keeps running while the cursor is over the hero — no hover pause.
   useEffect(() => {
-    if (paused) return;
     timerRef.current = setTimeout(next, SLIDE_DURATION);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [index, paused, next]);
+  }, [index, next]);
 
   return (
-    <section
-      className="relative flex h-[100svh] min-h-[640px] w-full items-end overflow-hidden bg-foreground"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
+    <section className="relative flex h-[100svh] min-h-[640px] w-full items-end overflow-hidden bg-foreground">
       {slides.map((slide, i) => (
         <motion.div
           key={slide.src}
@@ -73,13 +68,9 @@ export function HeroSlideshow({ slides }: { slides: Slide[] }) {
                 <motion.span
                   className="block h-full bg-background"
                   initial={false}
-                  animate={
-                    i === index
-                      ? { width: paused ? "50%" : "100%" }
-                      : { width: i < index ? "100%" : "0%" }
-                  }
+                  animate={{ width: i <= index ? "100%" : "0%" }}
                   transition={
-                    i === index && !paused
+                    i === index
                       ? { duration: SLIDE_DURATION / 1000, ease: "linear" }
                       : { duration: 0.3 }
                   }

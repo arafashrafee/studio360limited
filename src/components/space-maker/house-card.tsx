@@ -20,7 +20,7 @@ export function HouseCard({
     <Link
       href={`/space-maker/${house.projectSlug}`}
       className={cn(
-        "group block overflow-hidden rounded-2xl border border-line bg-background transition-colors duration-300 hover:border-foreground/20",
+        "group block overflow-hidden border border-line bg-background transition-colors duration-300 hover:border-foreground/20",
         view === "list" && "flex flex-col sm:flex-row"
       )}
     >
