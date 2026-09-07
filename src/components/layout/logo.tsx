@@ -1,17 +1,17 @@
 import Link from "next/link";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link href="/" className={cn("relative block h-9 w-[68px] shrink-0", className)}>
-      <Image
-        src="/logo.png"
+    <Link href="/" className={cn("relative block h-11 w-[87px] shrink-0", className)}>
+      <img
+        src="/logo.svg"
         alt="Studio360 Ltd"
-        fill
-        priority
-        sizes="68px"
-        className="object-contain object-left"
+        width={87}
+        height={44}
+        className="h-full w-full object-contain object-left"
+        decoding="async"
+        fetchPriority="high"
       />
     </Link>
   );
