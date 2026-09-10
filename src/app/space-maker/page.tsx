@@ -3,15 +3,15 @@ import { Container } from "@/components/ui/container";
 import { RevealText } from "@/components/ui/reveal-text";
 import { FadeIn } from "@/components/ui/fade-in";
 import { CTA } from "@/components/home/cta";
-import { services } from "@/lib/data/services";
 import { spaceMakerHouses } from "@/lib/data/space-maker-houses";
 import { HouseCatalog } from "@/components/space-maker/house-catalog";
 
-const spaceMaker = services.find((service) => service.title === "Space Maker")!;
+const SPACE_MAKER_INTRO =
+  "Our full-package home service — architecture, interiors, engineering, and construction delivered as one complete house.";
 
 export const metadata: Metadata = {
   title: "Space Maker",
-  description: spaceMaker.description,
+  description: SPACE_MAKER_INTRO,
 };
 
 export default function SpaceMakerPage() {
@@ -26,7 +26,7 @@ export default function SpaceMakerPage() {
           />
           <FadeIn delay={0.15}>
             <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-stone">
-              {spaceMaker.description}
+              {SPACE_MAKER_INTRO}
             </p>
           </FadeIn>
 

@@ -8,7 +8,8 @@ const PROJECT_TYPES = [
   "Architecture",
   "Construction",
   "Interior Design",
-  "Engineering",
+  "Project Management",
+  "Renovation & Remodeling",
   "Space Maker",
   "Other",
 ];

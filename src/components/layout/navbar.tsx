@@ -31,7 +31,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const solid = scrolled || open;
+  const compact = scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -47,30 +47,28 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
-        open
-          ? "bg-transparent"
-          : solid
-            ? "border-b border-line bg-background/90 backdrop-blur-md"
-            : "border-b border-transparent bg-transparent"
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-500",
+        !open && compact
+          ? "bg-background/90 backdrop-blur-md"
+          : "bg-transparent"
       )}
     >
       <div
         className={cn(
-          "flex items-center justify-between px-6 transition-all duration-500 sm:px-8",
-          solid ? "h-[68px] md:h-20" : "h-20 md:h-24"
+          "flex items-center justify-between px-6 transition-[height] duration-500 sm:px-8",
+          compact ? "h-[68px] md:h-20" : "h-20 md:h-24"
         )}
       >
         <div className={cn("transition-opacity duration-300", open && "pointer-events-none opacity-0")}>
-          <Logo className="transition-all duration-500" />
+          <Logo className="transition-[height,width] duration-500" />
         </div>
 
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           className={cn(
-            "relative z-10 flex size-10 items-center justify-center text-black transition-all duration-300",
-            !solid && "drop-shadow-[0_1px_4px_rgba(0,0,0,0.45)]"
+            "relative z-10 flex size-10 items-center justify-center text-black transition-colors duration-300",
+            !compact && "drop-shadow-[0_1px_4px_rgba(0,0,0,0.45)]"
           )}
           aria-label="Toggle menu"
           aria-expanded={open}

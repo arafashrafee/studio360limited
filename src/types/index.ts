@@ -23,6 +23,7 @@ export interface Service {
   index: string;
   title: string;
   description: string;
+  scope: string[];
   image: string;
 }
 

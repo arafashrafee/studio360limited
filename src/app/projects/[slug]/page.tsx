@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Images } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { ImageReveal } from "@/components/ui/image-reveal";
 import { LightboxProvider, LightboxTrigger } from "@/components/ui/lightbox";
 import { FadeIn } from "@/components/ui/fade-in";
 import { RevealText } from "@/components/ui/reveal-text";
@@ -57,11 +56,11 @@ export default async function ProjectDetailPage({
   return (
     <LightboxProvider images={project.gallery} alt={project.title}>
       <div className="pb-28 md:pb-36">
-        <section className="relative flex h-svh min-h-[560px] w-full items-end overflow-hidden bg-foreground pt-24">
+        <section className="group/hero relative flex h-svh min-h-[560px] w-full items-end overflow-hidden bg-foreground pt-24">
           <LightboxTrigger
             src={project.coverImage}
-            label={project.title}
-            className="absolute inset-0 size-full"
+            label={`all photos of ${project.title}`}
+            className="absolute inset-0 size-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-12px] focus-visible:outline-background"
           >
             <Image
               src={project.coverImage}
@@ -69,25 +68,40 @@ export default async function ProjectDetailPage({
               fill
               priority
               sizes="100vw"
-              className="object-cover"
+              className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/hero:scale-[1.03]"
             />
             <span className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/10 to-foreground/20" />
           </LightboxTrigger>
 
-          <Container className="pointer-events-none relative z-10 pb-12 md:pb-16">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.24em] text-background/70">
-              {project.category}
-            </p>
-            <RevealText
-              text={project.title}
-              as="h1"
-              className="max-w-3xl font-display text-[clamp(2.25rem,5.5vw,4.75rem)] font-medium leading-[1.02] tracking-tight text-background"
-            />
+          <Container className="pointer-events-none relative z-10 flex items-end justify-between gap-6 pb-12 md:pb-16">
+            <div className="min-w-0">
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.24em] text-background/70">
+                {project.category}
+              </p>
+              <RevealText
+                text={project.title}
+                as="h1"
+                className="max-w-3xl font-display text-[clamp(2.25rem,5.5vw,4.75rem)] font-medium leading-[1.02] tracking-tight text-background"
+              />
+            </div>
+            {project.gallery.length > 0 && (
+              <span className="mb-1 flex shrink-0 items-center gap-2 rounded-full border border-background/40 bg-foreground/50 px-3 py-2.5 text-background shadow-lg shadow-foreground/25 backdrop-blur-md sm:gap-2.5 sm:px-4">
+                <Images className="size-4" strokeWidth={1.75} />
+                <span className="hidden text-[11px] font-medium uppercase tracking-[0.18em] sm:inline">
+                  View photos
+                </span>
+                {project.gallery.length > 1 && (
+                  <span className="text-[11px] tabular-nums text-background/80">
+                    {project.gallery.length}
+                  </span>
+                )}
+              </span>
+            )}
           </Container>
         </section>
 
         <Container className="mt-14 md:mt-20">
-          <div className="grid grid-cols-1 gap-12 border-b border-line pb-16 md:grid-cols-12 md:gap-8 md:pb-20">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
             <div className="grid grid-cols-3 gap-6 md:col-span-4 md:grid-cols-1 md:gap-8">
               {facts.map((fact) => (
                 <div key={fact.label}>
@@ -121,28 +135,6 @@ export default async function ProjectDetailPage({
                 ))}
               </div>
             </div>
-          </div>
-
-          <div className="mt-16 grid grid-cols-1 gap-6 md:mt-20 md:grid-cols-2">
-            {project.gallery.slice(1).map((image, i) => (
-              <LightboxTrigger
-                key={image}
-                src={image}
-                label={`${project.title} — detail ${i + 1}`}
-                className={
-                  i % 3 === 0
-                    ? "aspect-[4/5] w-full md:col-span-2 md:aspect-[16/9]"
-                    : "aspect-[4/5] w-full"
-                }
-              >
-                <ImageReveal
-                  src={image}
-                  alt={`${project.title} — detail ${i + 1}`}
-                  className="size-full"
-                  delay={i * 0.05}
-                />
-              </LightboxTrigger>
-            ))}
           </div>
         </Container>
 
